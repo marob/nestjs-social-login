@@ -33,9 +33,14 @@ export class GithubOauthStrategy extends PassportStrategy(Strategy, 'github') {
 		// succeeds, or a null if it fails. When returning a user, Passport will complete its tasks
 		// (e.g., creating the user property on the Request object), and the request
 		// handling pipeline can continue.
-
-		const { id } = profile;
-		const user = await this.usersService.findOrCreate(id, 'github');
+		console.log(profile);
+		const user = await this.usersService.findOrCreate({
+			id: '', // FIXME
+			provider: 'github',
+			providerId: profile.id,
+			displayName: profile.displayName,
+			photos: profile.photos,
+		});
 		if (!user) {
 			// TODO Depending on the concrete implementation of findOrCreate(), throwing the
 			// UnauthorizedException here might not make sense...
